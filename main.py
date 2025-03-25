@@ -12,11 +12,17 @@ from aiogram.handlers import message, chat_member
 
 bot = Bot(token=Token)
 dp = Dispatcher()
+
 banned_words = [
     "ставки", "коэфы", "кэфы", "спорт", "профиль", "био", "bio", "|", "загляни"
 ]
 
-
+bad_words = [
+    "windows", "операционная система", "установка windows", "обновление windows", "панель управления", "проводник",
+    "диспетчер задач", "командная строка", "настройки", "брандмауэр", "антивирус", "драйверы", "системные требования",
+    "восстановление системы", "безопасный режим", "учетная запись", "лицензия", "параметры производительности",
+    "windows store", "приложения", "уведомления", "сетевые настройки", "клавиатурные сокращения"
+]
 
 @dp.message(Command("start"))
 async def pisun_f6(message: message.Message):
@@ -40,22 +46,28 @@ async def zahod(event: ChatMemberUpdated, bot: Bot):
 
 @dp.message()
 async def pidori(message: message.Message):
-    if message.chat.full_name.lower() != "linux and tux chat":
-        await bot.send_message(chat_id=5017631350, text=(f"{message.from_user.full_name}\n{message.from_user.full_name}"
-                                                         f"({message.from_user.id}):{message.text}\n\n{message.chat.linked_chat_id}\n"
-                                                         f"{message.chat.invite_link}\n{message.chat.id}"))
-    elif message.text.lower() in banned_words:
+
+    if message.text.lower() in banned_words:
         await bot.send_message(chat_id=5017631350, text="хуйлан обнаруен (по тексту сообщения)")
 
     elif message.from_user.full_name in banned_words:
         await bot.send_message(chat_id=5017631350, text="хуйлан обнаружен (по нику)")
 
-    elif "windows" in message.text:
+    elif  message.text.lower()  in bad_words:
         await message.reply('я тебя забаню🤑🤑🤑🤑🤑')
 
+    elif "бандера" in message.text.lower():
+        await message.answer_photo(photo="https://t.me/gd_ueban34/1090", message_effect_id="5046589136895476101")
 
-async def main ():
+    if message.chat.full_name.lower() != "linux and tux chat":
+        await bot.send_message(chat_id=5017631350, text=(f"{message.from_user.full_name}\n{message.from_user.full_name}"
+                                                         f"({message.from_user.id}):{message.text}\n\n{message.chat.linked_chat_id}\n"
+                                                         f"{message.chat.invite_link}\n{message.chat.id}"))
+
+
+async def main():
     await dp.start_polling(bot)
+
 
 while True:
     logging.basicConfig(level=logging.DEBUG)
